@@ -21,14 +21,14 @@ pip install -r requirements.txt
 
 4. Obtain your Telegram API ID, API hash, and phone number. Sign up for a new developer account on Telegram's official website: https://my.telegram.org/auth. After signing in, create a new application to obtain your API ID and API hash.
 
-5. Create a `config.py` file in the `bot` directory and add the following content:
+5. Create a `config.py` file in the `root` directory and add the following content:
 
 ```python
 YOUR_API_ID = "your_api_id_here"
 YOUR_API_HASH = "your_api_hash_here"
 YOUR_PHONE_NUMBER = "your_phone_number_here"  # with country code, e.g., '+1234567890'
 MESSAGE = "your_message_here"
-DELAY = 10  # Time delay in seconds
+GROUPS = "groups listed here with '\n' separator"
 ```
 
 Replace `your_api_id_here`, `your_api_hash_here`, `your_phone_number_here`, and `your_message_here` with your own credentials and the message you want to send. Adjust the `DELAY` variable to set the time delay between messages (in seconds).
