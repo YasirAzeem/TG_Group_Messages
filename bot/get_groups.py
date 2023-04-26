@@ -1,6 +1,7 @@
 from telethon.sync import TelegramClient
 from telethon.tl.functions.channels import GetFullChannelRequest
-from telethon.tl.functions.messages import GetAllChatsRequest
+from telethon.tl.functions.messages import GetDialogsRequest
+
 
 from config import *
 
@@ -11,22 +12,18 @@ phone_number = YOUR_PHONE_NUMBER
 async def get_groups():
     async with TelegramClient('anon', api_id, api_hash) as client:
         await client.start(phone=phone_number)
-        all_chats = await client(GetAllChatsRequest([]))
+        dialogs = await client.get_dialogs()
 
         groups = []
 
-        for chat in all_chats.chats:
-            if chat.megagroup or chat.broadcast:
-                try:
-                    full_chat = await client(GetFullChannelRequest(chat.id))
-                    participants_count = full_chat.full_chat.participants_count
-                except Exception as e:
-                    participants_count = 0
-
-                group_info = f"{chat.title} (ID: {chat.id}) - {participants_count} members"
-                groups.append(group_info)
-        print("You are a member of the following groups and channels:")
-        print("\n".join(groups))
+        for dialog in dialogs:
+            if dialog.is_group or dialog.is_channel:
+                group_username = dialog.entity.username if dialog.entity.username else "No username"
+                group_info = f"{dialog.name} (ID: {dialog.entity.id}, Username: {group_username})"
+                print(group_info)
+                groups.append(dialog.entity)
+        # print("You are a member of the following groups and channels:")
+        # print("\n".join(groups))
         return groups
 
 
