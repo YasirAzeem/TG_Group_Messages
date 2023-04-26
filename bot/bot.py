@@ -19,15 +19,19 @@ async def main():
     allowed_groups = [x.replace('@','').strip() for x in GROUPS.split('\n')]
     sent_count = 0
     message = MESSAGE
-    delay = 3600/len(allowed_groups)
-    async with TelegramClient('anon', YOUR_API_ID, YOUR_API_HASH) as client:
-        await client.start(phone=YOUR_PHONE_NUMBER)
-        for group in groups:
-            if group.username:
-                if group.username.strip() in allowed_groups:
-                    # print(f"Sending message to {group.title} (ID: {group.id}) (Username: {group.username})")
-                    await send_message_with_delay(client, group, message, delay)
-                    sent_count+=1
-                    print(f"{sent_count} | Message sent to {group.title} (ID: {group.id}) (Username: {group.username})")
-                else:
-                    print(f"Group {group.title} (ID: {group.id}) (Username: {group.username}) is not in allowed groups list.")
+    delay = 60/len(allowed_groups)
+    while True:
+        async with TelegramClient('anon', YOUR_API_ID, YOUR_API_HASH) as client:
+            await client.start(phone=YOUR_PHONE_NUMBER)
+            for group in groups:
+                if group.username:
+                    if group.username.strip() in allowed_groups:
+                        # print(f"Sending message to {group.title} (ID: {group.id}) (Username: {group.username})")
+                        await send_message_with_delay(client, group, message, delay)
+                        sent_count+=1
+                        print(f"{sent_count} | Message sent to {group.title} (ID: {group.id}) (Username: {group.username})")
+                    else:
+                        print(f"Group {group.title} (ID: {group.id}) (Username: {group.username}) is not in allowed groups list.")
+
+        print('Waiting for 1 hour before sending the messages again...')
+        await sleep(3600)
